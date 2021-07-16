@@ -1,0 +1,415 @@
+--------------------------------------SELECT STATEMENT------------------------------------
+* SELECT column1, column2, ... FROM table_name;
+* SELECT * FROM table_name; // selects all fields from table.
+* SELECT DISTINCT column1, column2, ... FROM table_name; //select ditinct ones.
+
+
+------------------------------------INSERT-------------------------------------------------
+* INSERT INTO table_name (column1, column2, column3, ...)
+  VALUES (value1, value2, value3, ...);
+
+* INSERT INTO table_name
+  VALUES (value1, value2, value3, ...);
+
+
+  -----------------------------------UPDATE-------------------------------------------------
+
+  * UPDATE table_name
+    SET column1 = value1, column2 = value2, ...
+    WHERE condition;
+
+ ------------------------------------- DELETE-----------------------------------------------
+
+ * DELETE FROM table_name WHERE condition;
+ * DELETE FROM table_name; // deltes all rows.
+
+
+---------------------------------------WHERE------------------------------------------------
+* SELECT column1, column2, ... FROM table_name WHERE condition;
+
+  Note: The WHERE clause is not only used in SELECT statements, it is also used in UPDATE, DELETE, etc.!
+
+  Example:
+  1) SELECT * FROM Customers WHERE Country = 'Mexico'; // note for strings we are using single qoutes.
+
+  2) SELECT * FROM Customers WHERE NOT City = 'Berlin'; //NOT command.
+
+  3) SELECT * FROM Customers WHERE Country = 'Mexico' AND Gender='Male';
+
+
+-----------------------------------AND, OR and NOT Operators ----------------------------------------------
+*  SELECT column1, column2, ...
+   FROM table_name
+   WHERE condition1 AND condition2 AND condition3 ...;
+
+* SELECT column1, column2, ...
+  FROM table_name
+  WHERE condition1 OR condition2 OR condition3 ...;
+
+* SELECT column1, column2, ...
+  FROM table_name
+  WHERE NOT condition;
+
+  Example:
+  1) SELECT * FROM Customers
+     WHERE Country = 'Germany' AND (City = 'Berlin' OR City = 'Stuttgart');
+
+---------------------------------------------LIMIT--------------------------------------------------------
+* The LIMIT clause is used to specify the number of records to return.
+
+* SELECT column_name(s)
+  FROM table_name
+  WHERE condition
+  LIMIT number;
+
+--------------------------------------------AGGREGATE FUNCTIONS----------------------------------------------
+
+* MAX,MIN,COUNT,AVG,SUM.
+* SELECT MIN(column_name)
+  FROM table_name
+  WHERE condition;
+
+* SELECT MAX(column_name)
+  FROM table_name
+  WHERE condition;
+
+*SELECT COUNT(column_name)
+ FROM table_name
+ WHERE condition;
+
+* SELECT AVG(column_name)
+  FROM table_name
+  WHERE condition;
+
+* SELECT SUM(column_name)
+  FROM table_name
+  WHERE condition;
+
+---------------------------------------------------LIKE-------------------------------------------------------
+
+* The LIKE operator is used in a WHERE clause to search for a specified pattern in a column.
+*  There are two wildcards often used in conjunction with the LIKE operator:
+    1) The percent sign (%) represents zero, one, or multiple characters
+    2) The underscore sign (_) represents one, single character
+
+* SELECT column1, column2, ...
+  FROM table_name
+  WHERE columnN LIKE pattern;
+
+* WHERE CustomerName LIKE 'a%' -	Finds any values that start with "a"
+  WHERE CustomerName LIKE '%a'	- Finds any values that end with "a"
+  WHERE CustomerName LIKE '%or%' -	Finds any values that have "or" in any position
+  WHERE CustomerName LIKE '_r%' -	Finds any values that have "r" in the second position
+  WHERE CustomerName LIKE 'a_%' -	Finds any values that start with "a" and are at least 2 characters in length
+  WHERE CustomerName LIKE 'a__%' -	Finds any values that start with "a" and are at least 3 characters in length
+  WHERE ContactName LIKE 'a%o' -	Finds any values that start with "a" and ends with "o"
+
+* In reverse to this you can use NOT LIKE.
+
+---------------------------------------------IN------------------------------------------------------
+
+* The IN operator allows you to specify multiple values in a WHERE clause.
+
+*  The IN operator is a shorthand for multiple OR conditions.
+
+* SELECT column_name(s)
+  FROM table_name
+  WHERE column_name IN (value1, value2, ...);
+
+* SELECT column_name(s)
+  FROM table_name
+  WHERE column_name IN (SELECT STATEMENT);
+
+* In reverse to this you can use NOT IN.
+
+-------------------------------------------BETWEEN-----------------------------------------------------
+
+* The BETWEEN operator selects values within a given range. The values can be numbers, text, or dates.
+
+*  The BETWEEN operator is inclusive: begin and end values are included.
+
+*  SELECT column_name(s)
+   FROM table_name
+   WHERE column_name BETWEEN value1 AND value2;
+
+  Example:
+ 1) SELECT * FROM Products
+    WHERE Price BETWEEN 10 AND 20
+    AND CategoryID NOT IN (1,2,3);
+
+ 2) SELECT * FROM Orders
+    WHERE OrderDate BETWEEN '1996-07-01' AND '1996-07-31';
+
+* In reverse to this you can use NOT BETWEEN.
+
+-----------------------------------------------ORDER BY----------------------------------------------
+* The ORDER BY keyword is used to sort the result-set in ascending or descending order.
+
+*  The ORDER BY keyword sorts the records in ascending order by default.
+    To sort the records in descending order, use the DESC keyword.
+
+* SELECT column1, column2, ...
+  FROM table_name
+  ORDER BY column1, column2, ... ASC|DESC;
+
+   Example:
+
+  1) SELECT * FROM Customers
+     ORDER BY Country ASC, CustomerName DESC;
+
+ --------------------------------------ALIAS-----------------------------------------------------------
+
+ *  Aliases are used to give a table, or a column in a table, a temporary name.
+
+ *   Aliases are often used to make column names more readable.
+
+ *  An alias only exists for the duration of that query.
+
+ *  An alias is created with the AS keyword.
+
+ * SELECT column_name AS alias_name
+   FROM table_name;
+
+ * SELECT column_name(s)
+   FROM table_name AS alias_name;
+
+   Example:
+   1) SELECT CustomerName AS Customer, ContactName AS "Contact Person"
+      FROM Customers;  // single or double qoutes needed if alias name contains spaces.
+
+   2) SELECT o.OrderID, o.OrderDate, c.CustomerName
+      FROM Customers AS c, Orders AS o
+      WHERE c.CustomerName='Around the Horn' AND c.CustomerID=o.CustomerID;
+
+ *  There are more than one table involved in a query.
+ *  Functions are used in the query.
+ *  Column names are big or not very readable.
+ *  Two or more columns are combined together.
+
+--------------------------------------------JOINS------------------------------------------------------
+
+*  A JOIN clause is used to combine rows from two or more tables, based on a related column between them.
+* Various joins.
+  ->INNER JOIN: Returns records that have matching values in both tables
+  ->LEFT JOIN: Returns all records from the left table, and the matched records from the right table
+  ->RIGHT JOIN: Returns all records from the right table, and the matched records from the left table
+  ->CROSS JOIN: Returns all records from both tables
+  -> A self join is a regular join, but the table is joined with itself.
+
+* SELECT column_name(s)
+  FROM table1
+  INNER JOIN table2
+  ON table1.column_name = table2.column_name;
+
+* SELECT column_name(s)
+  FROM table1
+  LEFT JOIN table2
+  ON table1.column_name = table2.column_name;
+
+* SELECT column_name(s)
+  FROM table1
+  RIGHT JOIN table2
+  ON table1.column_name = table2.column_name;
+
+* SELECT column_name(s)
+  FROM table1
+  CROSS JOIN table2;
+
+ * self join-
+  SELECT column_name(s)
+  FROM table1 T1, table1 T2
+  WHERE condition;
+
+* Example:
+  1) SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
+     FROM Orders
+     INNER JOIN Customers ON Orders.CustomerID=Customers.CustomerID;
+
+  2) SELECT Orders.OrderID, Customers.CustomerName, Shippers.ShipperName
+     FROM ((Orders
+     INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID)
+     INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID);
+
+  3) SELECT Customers.CustomerName, Orders.OrderID
+     FROM Customers
+     LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+     ORDER BY Customers.CustomerName;
+
+  4) SELECT Orders.OrderID, Employees.LastName, Employees.FirstName
+     FROM Orders
+     RIGHT JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+     ORDER BY Orders.OrderID;
+
+  5) SELECT Customers.CustomerName, Orders.OrderID
+     FROM Customers
+     CROSS JOIN Orders
+     WHERE Customers.CustomerID=Orders.CustomerID;
+
+  6) SELECT A.CustomerName AS CustomerName1, B.CustomerName AS CustomerName2, A.City
+     FROM Customers A, Customers B
+     WHERE A.CustomerID <> B.CustomerID
+     AND A.City = B.City
+     ORDER BY A.City;
+
+
+------------------------------------------------SET OPERATORS-------------------------------------
+* The UNION operator is used to combine the result-set of two or more SELECT statements.
+*  Every SELECT statement within UNION must have the same number of columns
+* The columns must also have similar data types
+*  The columns in every SELECT statement must also be in the same order
+
+* SELECT column_name(s) FROM table1
+  UNION
+  SELECT column_name(s) FROM table2;
+
+* SELECT column_name(s) FROM table1
+  UNION ALL
+  SELECT column_name(s) FROM table2; // allows duplicates.
+
+ Example:
+
+ 1) SELECT City FROM Customers
+    UNION
+    SELECT City FROM Suppliers
+    ORDER BY City;
+
+* There are other set operators like INTERSECT,EXCEPT.
+
+
+-----------------------------------------------------GROUP BY-------------------------------
+
+* The GROUP BY statement groups rows that have the same values into summary rows, like "find the number of customers in each country".
+
+* The GROUP BY statement is often used with aggregate functions (COUNT(), MAX(), MIN(), SUM(), AVG()) to group
+  the result-set by one or more columns.
+
+* Example:
+  1) SELECT COUNT(CustomerID), Country
+     FROM Customers
+     GROUP BY Country
+     ORDER BY COUNT(CustomerID) DESC;
+
+  2) SELECT Shippers.ShipperName, COUNT(Orders.OrderID) AS NumberOfOrders FROM Orders
+     LEFT JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID
+     GROUP BY ShipperName;
+
+--------------------------------------------------HAVING------------------------------------------------------
+
+* The HAVING clause was added to SQL because the WHERE keyword cannot be used with aggregate functions.
+
+* SELECT column_name(s)
+  FROM table_name
+  WHERE condition
+  GROUP BY column_name(s)
+  HAVING condition
+  ORDER BY column_name(s);
+
+ * Example:
+  1) SELECT COUNT(CustomerID), Country
+     FROM Customers
+     GROUP BY Country
+     HAVING COUNT(CustomerID) > 5
+     ORDER BY COUNT(CustomerID) DESC;
+
+  2) SELECT Employees.LastName, COUNT(Orders.OrderID) AS NumberOfOrders
+     FROM Orders
+     INNER JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+     WHERE LastName = 'Davolio' OR LastName = 'Fuller'
+     GROUP BY LastName
+     HAVING COUNT(Orders.OrderID) > 25;
+
+
+--------------------------------------------------EXIST---------------------------------------------------
+
+*  The EXISTS operator is used to test for the existence of any record in a subquery.
+
+*   The EXISTS operator returns TRUE if the subquery returns one or more records.
+
+*  SELECT column_name(s)
+   FROM table_name
+   WHERE EXISTS
+   (SELECT column_name FROM table_name WHERE condition);
+
+ * Example:
+
+   1) SELECT SupplierName
+      FROM Suppliers
+      WHERE EXISTS (SELECT ProductName FROM Products WHERE Products.SupplierID = Suppliers.supplierID AND Price = 22);
+
+
+-----------------------------------------------------ANY/ALL--------------------------------------
+* The ANY and ALL operators allow you to perform a comparison between a single column value and a range of other values.
+
+* SELECT column_name(s)
+  FROM table_name
+  WHERE column_name operator ANY
+    (SELECT column_name
+    FROM table_name
+    WHERE condition);
+
+* SELECT ALL column_name(s)
+  FROM table_name
+  WHERE condition;
+
+* SELECT column_name(s)
+  FROM table_name
+  WHERE column_name operator ALL
+    (SELECT column_name
+    FROM table_name
+    WHERE condition);
+
+ * Example:
+
+  1) SELECT ProductName
+     FROM Products
+     WHERE ProductID = ANY
+       (SELECT ProductID
+       FROM OrderDetails
+       WHERE Quantity > 1000);
+
+----------------------------------------------------------INSERT INTO SELECT------------------------------------
+
+* The INSERT INTO SELECT statement copies data from one table and inserts it into another table.
+
+* The INSERT INTO SELECT statement requires that the data types in source and target tables matches.
+
+* INSERT INTO table2
+  SELECT * FROM table1
+  WHERE condition; // copies all columns from table to another.
+
+* INSERT INTO table2 (column1, column2, column3, ...)
+  SELECT column1, column2, column3, ...
+  FROM table1
+  WHERE condition;
+
+ * Example:
+
+  1) INSERT INTO Customers (CustomerName, City, Country)
+     SELECT SupplierName, City, Country FROM Suppliers
+     WHERE Country='Germany';
+
+--------------------------------------------------------CASE---------------------------------------------
+* The CASE statement goes through conditions and returns a value when the first condition is met (like an if-then-else statement). So, once a condition is true, it will stop reading and return the result. If no conditions are true, it returns the value in the ELSE clause.
+
+* If there is no ELSE part and no conditions are true, it returns NULL.
+
+*  CASE
+       WHEN condition1 THEN result1
+       WHEN condition2 THEN result2
+       WHEN conditionN THEN resultN
+       ELSE result
+   END;
+
+ * Example:
+
+ 1) SELECT CustomerName, City, Country
+    FROM Customers
+    ORDER BY
+    (CASE
+        WHEN City IS NULL THEN Country
+        ELSE City
+    END);
+------------------------------------------------------NULL FUNCTIONS----------------------------------------
+
+* SELECT ProductName, UnitPrice * (UnitsInStock + IFNULL(UnitsOnOrder, 0))
+  FROM Products;  //ifnull or COALESCE returns 0 if UnitsOnOrder is null.
